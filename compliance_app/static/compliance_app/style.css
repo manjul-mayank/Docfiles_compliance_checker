@@ -1,0 +1,618 @@
+/* --- VARIABLES: AI World Palette --- */
+:root {
+    --color-bg-dark: #1A1A2E; /* Deep Dark Purple-Blue */
+    --color-bg-medium: #1F4068; /* Darker Blue */
+    --color-bg-light: #284777; /* Slightly Lighter Blue */
+    --color-primary-glow: #00ADB5; /* Cyan Blue Glow */
+    --color-secondary-glow: #FFC0CB; /* Pink Glow */
+    --color-accent-text: #E0FFFF; /* Bright Light Cyan */
+    --color-text-normal: #A9B2C4; /* Muted Blue-Gray */
+    --color-card-bg: #1F2840; /* Dark Card Background */
+    --color-border-glow: rgba(0, 173, 181, 0.4); /* Primary Glow for borders */
+    --color-border-secondary: rgba(255, 192, 203, 0.4); /* Secondary Glow for borders */
+
+    --shadow-deep: rgba(0, 0, 0, 0.7);
+    --shadow-glow: rgba(0, 173, 181, 0.6);
+}
+
+/* --- BASE STYLES --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* Import a futuristic/monospace-like font */
+@import url('https://fonts.googleapis.com/css2?family=Major+Mono+Display&family=Space+Mono:wght@400;700&display=swap');
+
+body {
+    font-family: 'Space Mono', monospace;
+    background-color: var(--color-bg-dark);
+    color: var(--color-text-normal);
+    line-height: 1.7;
+    padding: 0;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* --- AI Background Animation (Layer 1: Shifting Gradients) --- */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at top left, var(--color-bg-light) 0%, transparent 20%),
+        radial-gradient(circle at bottom right, var(--color-bg-light) 0%, transparent 20%),
+        linear-gradient(135deg, var(--color-bg-dark) 0%, var(--color-bg-medium) 100%);
+    background-blend-mode: overlay, overlay, normal;
+    background-size: 150% 150%, 150% 150%, cover;
+    animation: backgroundShift 20s ease infinite alternate;
+    z-index: -2;
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+/* AI Background Animation (Layer 2: Circuit/Data Flow Grid) */
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        repeating-linear-gradient(0deg, rgba(0, 173, 181, 0.05), rgba(0, 173, 181, 0.05) 1px, transparent 1px, transparent 20px),
+        repeating-linear-gradient(90deg, rgba(0, 173, 181, 0.05), rgba(0, 173, 181, 0.05) 1px, transparent 1px, transparent 20px);
+    background-size: 100% 100%;
+    animation: flowLines 30s linear infinite;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+
+@keyframes backgroundShift {
+    0% { background-position: 0% 0%, 100% 100%, 0% 0%; }
+    100% { background-position: 100% 100%, 0% 0%, 100% 100%; }
+}
+
+@keyframes flowLines {
+    from { background-position: 0 0; }
+    to { background-position: 40px 40px; }
+}
+
+/* Ensure the main content is above the background */
+.container {
+    max-width: 1400px; 
+    margin: 40px auto; 
+    padding: 0 20px;
+    position: relative; 
+    z-index: 1; 
+}
+@media (min-width: 1600px) {
+    .container {
+        max-width: 1500px;
+    }
+}
+
+
+header {
+    text-align: center;
+    padding: 40px 0;
+    margin-bottom: 30px;
+    position: relative; 
+    z-index: 2; 
+}
+
+header h1 {
+    font-family: 'Major Mono Display', monospace;
+    font-size: 3.8em;
+    color: var(--color-primary-glow);
+    text-shadow: 0 0 10px var(--color-primary-glow), 0 0 20px var(--color-primary-glow);
+    margin-bottom: 15px;
+    letter-spacing: 3px;
+    animation: pulseGlow 2s infinite alternate;
+}
+
+header p {
+    font-size: 1.1em;
+    color: var(--color-accent-text);
+    max-width: 800px;
+    margin: 0 auto;
+    text-shadow: 0 0 5px rgba(0, 173, 181, 0.5);
+}
+
+@keyframes pulseGlow {
+    from { text-shadow: 0 0 8px var(--color-primary-glow), 0 0 16px var(--color-primary-glow); }
+    to { text-shadow: 0 0 12px var(--color-primary-glow), 0 0 24px var(--color-primary-glow); }
+}
+
+
+/* --- NAVIGATION / TOP BAR --- */
+.navbar {
+    background-color: var(--color-bg-medium) !important;
+    border-bottom: 1px solid var(--color-border-glow);
+    box-shadow: 0 2px 10px var(--shadow-deep);
+    position: relative;
+    z-index: 10;
+}
+.navbar-brand {
+    color: var(--color-accent-text) !important;
+    font-family: 'Major Mono Display', monospace;
+    font-weight: 400;
+    font-size: 1.6em;
+    letter-spacing: 2px;
+}
+
+/* --- CARD STYLES (Futuristic Panels) --- */
+.card {
+    background-color: var(--color-card-bg);
+    border: 2px solid var(--color-primary-glow);
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 173, 181, 0.5), inset 0 0 8px rgba(0, 173, 181, 0.3);
+    margin-bottom: 30px;
+    padding: 30px;
+    transition: all 0.4s ease-in-out;
+    position: relative;
+    overflow: hidden;
+    z-index: 5;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 25px rgba(0, 173, 181, 0.8), inset 0 0 12px rgba(0, 173, 181, 0.5);
+    border-color: var(--color-secondary-glow);
+}
+
+.card-header {
+    background: linear-gradient(90deg, var(--color-bg-light) 0%, rgba(0, 173, 181, 0.2) 100%) !important;
+    color: var(--color-accent-text) !important;
+    padding: 18px 30px;
+    margin: -30px -30px 30px -30px;
+    border-bottom: 1px solid var(--color-primary-glow);
+    font-family: 'Major Mono Display', monospace;
+    font-size: 1.3em;
+    letter-spacing: 1px;
+    text-shadow: 0 0 5px rgba(0, 173, 181, 0.7);
+}
+
+.card-header h4 {
+    margin-bottom: 0;
+    font-weight: 400;
+}
+
+.card-header i {
+    margin-right: 12px;
+    color: var(--color-secondary-glow);
+    font-size: 1.1em;
+}
+
+/* --- FORM & INPUTS --- */
+.input-group {
+    margin-bottom: 25px;
+}
+
+label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--color-accent-text);
+    font-size: 1em;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+.form-control {
+    background-color: var(--color-bg-medium);
+    border: 1px solid var(--color-primary-glow);
+    border-radius: 4px;
+    color: var(--color-accent-text);
+    padding: 12px 15px;
+    font-size: 1em;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 0 5px rgba(0, 173, 181, 0.3);
+}
+
+.form-control::placeholder {
+    color: var(--color-text-normal);
+    opacity: 0.7;
+}
+
+.form-control:focus {
+    border-color: var(--color-secondary-glow);
+    outline: none;
+    box-shadow: 0 0 8px var(--color-secondary-glow), inset 0 0 5px var(--color-secondary-glow);
+    background-color: var(--color-bg-light);
+}
+
+textarea.form-control {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* File Upload Customization - SINGLE BLOCK */
+.file-label {
+    background-color: var(--color-bg-medium);
+    border: 2px dashed var(--color-primary-glow);
+    border-radius: 6px;
+    color: var(--color-accent-text);
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: inset 0 0 5px rgba(0, 173, 181, 0.3);
+    /* Flex properties for centering content */
+    display: flex; 
+    align-items: center;
+    justify-content: center;
+}
+
+.file-label:hover {
+    background-color: var(--color-bg-light);
+    border-color: var(--color-secondary-glow);
+    box-shadow: 0 0 10px var(--color-secondary-glow), inset 0 0 8px var(--color-secondary-glow);
+}
+
+.file-label i {
+    margin-right: 15px;
+    color: var(--color-primary-glow);
+    font-size: 1.3em;
+}
+
+/* Ensure the file input is hidden */
+#file-upload {
+    display: none; 
+}
+
+
+/* --- BUTTONS (Glowing & Animated) --- */
+.btn {
+    padding: 15px 30px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.1em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease-in-out;
+    position: relative;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border-radius: 8px; /* Match button border-radius */
+    background: linear-gradient(45deg, var(--color-primary-glow), var(--color-secondary-glow), var(--color-primary-glow));
+    background-size: 400% 400%;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    animation: gradientShift 2s infinite linear;
+}
+
+.btn:hover::before {
+    opacity: 1;
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.btn:hover {
+    transform: translateY(-3px) scale(1.01);
+    box-shadow: 0 0 15px var(--shadow-glow);
+}
+
+.btn i {
+    margin-right: 12px;
+    font-size: 1.1em;
+}
+
+.btn-primary {
+    background-color: var(--color-bg-light);
+    color: var(--color-primary-glow);
+    border: 1px solid var(--color-primary-glow);
+}
+.btn-primary:hover {
+    color: var(--color-bg-dark);
+}
+
+/* Re-adding consistent styles for btn-success */
+.btn-success {
+    background-color: var(--color-bg-light);
+    color: var(--color-primary-glow);
+    border: 1px solid var(--color-primary-glow);
+}
+.btn-success:hover {
+    color: var(--color-bg-dark);
+}
+
+.btn-warning {
+    background-color: var(--color-bg-light);
+    color: var(--color-secondary-glow);
+    border: 1px solid var(--color-secondary-glow);
+}
+.btn-warning:hover {
+    color: var(--color-bg-dark);
+}
+
+.btn-info { /* For download link */
+    background-color: var(--color-bg-light);
+    color: var(--color-primary-glow);
+    border: 1px solid var(--color-primary-glow);
+}
+.btn-info:hover {
+    color: var(--color-bg-dark);
+}
+
+.btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+    border-color: var(--color-text-normal) !important;
+    color: var(--color-text-normal) !important;
+}
+.btn:disabled::before {
+    opacity: 0;
+    animation: none; /* Disable animation when disabled */
+}
+
+/* --- STATUS & MESSAGES (Holographic Alerts) --- */
+.alert {
+    padding: 18px 25px;
+    margin-top: 25px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 0.5px;
+    border: 1px solid;
+    animation: alertFadeIn 0.5s ease-out;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+}
+
+@keyframes alertFadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.alert-info {
+    background-color: rgba(0, 173, 181, 0.15);
+    color: var(--color-primary-glow);
+    border-color: var(--color-primary-glow);
+}
+.alert-success {
+    background-color: rgba(60, 179, 113, 0.15);
+    color: #3CB371;
+    border-color: #3CB371;
+}
+.alert-danger {
+    background-color: rgba(255, 99, 71, 0.15);
+    color: #FF6347;
+    border-color: #FF6347;
+}
+.alert-warning {
+    background-color: rgba(255, 192, 203, 0.15);
+    color: var(--color-secondary-glow);
+    border-color: var(--color-secondary-glow);
+}
+
+
+/* --- REPORT SECTION --- */
+.doc-info {
+    font-size: 0.95em;
+    color: var(--color-text-normal);
+    margin-bottom: 25px;
+    padding: 18px;
+    border: 1px dashed var(--color-secondary-glow);
+    border-radius: 6px;
+    background-color: var(--color-bg-light);
+    box-shadow: inset 0 0 5px rgba(255, 192, 203, 0.3);
+}
+.doc-info strong, .doc-info span {
+    color: var(--color-accent-text);
+}
+
+
+.report {
+    margin-top: 30px;
+    padding: 30px;
+    border: 1px solid var(--color-primary-glow);
+    border-radius: 8px;
+    background-color: var(--color-bg-medium);
+    box-shadow: 0 0 10px rgba(0, 173, 181, 0.4);
+}
+
+.report h3 {
+    color: var(--color-accent-text);
+    margin-bottom: 25px;
+    border-bottom: 2px solid var(--color-primary-glow);
+    padding-bottom: 15px;
+    font-size: 1.8em;
+    font-weight: 700;
+    text-shadow: 0 0 5px rgba(0, 173, 181, 0.7);
+}
+
+.report-section {
+    margin-bottom: 30px;
+    padding: 25px;
+    border-left: 5px solid var(--color-secondary-glow);
+    background-color: var(--color-card-bg);
+    border-radius: 6px;
+    box-shadow: 0 0 8px rgba(255, 192, 203, 0.3), inset 0 0 5px rgba(255, 192, 203, 0.2);
+    position: relative;
+}
+
+.report-section h4 {
+    color: var(--color-primary-glow);
+    margin-bottom: 15px;
+    font-size: 1.4em;
+    font-weight: 700;
+    text-shadow: 0 0 3px rgba(0, 173, 181, 0.5);
+}
+
+#ai-report-content {
+    white-space: pre-wrap;
+    font-family: 'Space Mono', monospace;
+    background-color: var(--color-bg-medium);
+    color: var(--color-accent-text);
+    padding: 15px;
+    border-radius: 6px;
+    border: 1px solid var(--color-primary-glow);
+    max-height: 450px;
+    overflow-y: auto;
+    box-shadow: inset 0 0 5px rgba(0, 173, 181, 0.3);
+}
+
+#grammar-issues-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+#grammar-issues-list li {
+    padding: 15px;
+    margin-bottom: 12px;
+    border-left: 5px solid var(--color-secondary-glow);
+    background-color: var(--color-bg-light);
+    border-radius: 6px;
+    font-size: 0.95em;
+    box-shadow: 0 0 5px rgba(255, 192, 203, 0.3);
+    color: var(--color-accent-text);
+}
+
+#grammar-issues-list li strong {
+    color: var(--color-primary-glow);
+    font-weight: 700;
+}
+
+#initial-report-msg, #initial-upload-msg {
+    text-align: center;
+    padding: 40px;
+    font-size: 1.1em;
+    color: var(--color-text-normal);
+    background-color: var(--color-bg-light);
+    border-radius: 8px;
+    margin-top: 20px;
+    border: 1px dashed var(--color-secondary-glow);
+    box-shadow: inset 0 0 8px rgba(255, 192, 203, 0.2);
+}
+
+/* --- DOWNLOAD AREA --- */
+.download-box {
+    text-align: center;
+    padding: 40px;
+    border: 2px dashed var(--color-primary-glow);
+    border-radius: 10px;
+    background-color: rgba(0, 173, 181, 0.15);
+    margin-top: 30px;
+    box-shadow: 0 0 15px rgba(0, 173, 181, 0.6);
+}
+
+.download-box i {
+    font-size: 4em;
+    color: var(--color-primary-glow);
+    margin-bottom: 20px;
+    animation: pulseIcon 1.5s infinite alternate;
+}
+
+@keyframes pulseIcon {
+    from { text-shadow: 0 0 5px var(--color-primary-glow), 0 0 10px var(--color-primary-glow); transform: scale(1); }
+    to { text-shadow: 0 0 8px var(--color-primary-glow), 0 0 15px var(--color-primary-glow); transform: scale(1.05); }
+}
+
+.download-box p {
+    font-size: 1.2em;
+    color: var(--color-accent-text);
+    margin-bottom: 25px;
+    text-shadow: 0 0 5px rgba(0, 173, 181, 0.5);
+}
+
+/* --- LOADING OVERLAY (Holographic) --- */
+.loading-overlay {
+    background-color: rgba(26, 26, 46, 0.98);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.spinner {
+    border: 4px solid var(--color-bg-light);
+    border-top: 4px solid var(--color-primary-glow);
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 25px;
+    box-shadow: 0 0 15px var(--color-primary-glow);
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+#loading-text {
+    font-size: 1.5em;
+    color: var(--color-secondary-glow);
+    font-weight: 700;
+    text-shadow: 0 0 8px var(--color-secondary-glow);
+    animation: textFlicker 1.5s infinite alternate;
+}
+
+@keyframes textFlicker {
+    0%, 100% { opacity: 1; text-shadow: 0 0 8px var(--color-secondary-glow); }
+    50% { opacity: 0.8; text-shadow: none; }
+}
+
+
+.hidden {
+    display: none !important;
+}
+
+/* --- Responsive Adjustments for smaller screens (Bootstrap handles the rest) --- */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 2.5em;
+    }
+    .card {
+        padding: 20px;
+    }
+    .card-header {
+        margin: -20px -20px 20px -20px;
+        padding: 15px 20px;
+    }
+    .btn {
+        padding: 12px 20px;
+        font-size: 1em;
+    }
+    .report-section {
+        padding: 15px;
+    }
+    .container {
+        margin: 20px auto;
+    }
+}
